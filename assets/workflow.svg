@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="250" viewBox="0 0 1200 250" role="img" aria-labelledby="title desc">
+  <title id="title">Video Deep Reader workflow</title>
+  <desc id="desc">Acquire subtitles and frames, inspect evidence, ask for targeted frames, then deliver a timestamped analysis.</desc>
+  <defs>
+    <style>
+      .box { fill: #f8fafc; stroke: #cbd5e1; stroke-width: 2; }
+      .num { font: 800 16px Arial, sans-serif; }
+      .head { font: 700 18px Arial, sans-serif; fill: #0f172a; }
+      .body { font: 14px Arial, sans-serif; fill: #475569; }
+      .arrow { stroke: #94a3b8; stroke-width: 3; fill: none; marker-end: url(#arrow); }
+    </style>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0 0 L8 4 L0 8 Z" fill="#94a3b8"/>
+    </marker>
+  </defs>
+  <rect width="1200" height="250" rx="24" fill="#f8fafc"/>
+  <g transform="translate(35 46)">
+    <rect class="box" width="240" height="150" rx="18"/>
+    <circle cx="38" cy="38" r="20" fill="#dbeafe"/><text x="32" y="44" class="num" fill="#1d4ed8">01</text>
+    <text x="72" y="43" class="head">Acquire</text>
+    <text x="24" y="80" class="body">Platform or attached captions</text>
+    <text x="24" y="105" class="body">Representative frames</text>
+    <text x="24" y="130" class="body">Source and coverage metadata</text>
+  </g>
+  <path class="arrow" d="M290 121 H350"/>
+  <g transform="translate(365 46)">
+    <rect class="box" width="240" height="150" rx="18"/>
+    <circle cx="38" cy="38" r="20" fill="#fef3c7"/><text x="32" y="44" class="num" fill="#b45309">02</text>
+    <text x="72" y="43" class="head">Inspect</text>
+    <text x="24" y="80" class="body">Read timestamped speech</text>
+    <text x="24" y="105" class="body">Look at every sampled frame</text>
+    <text x="24" y="130" class="body">Flag uncertain claims</text>
+  </g>
+  <path class="arrow" d="M620 121 H680"/>
+  <g transform="translate(695 46)">
+    <rect class="box" width="240" height="150" rx="18"/>
+    <circle cx="38" cy="38" r="20" fill="#ffe4e6"/><text x="32" y="44" class="num" fill="#be123c">03</text>
+    <text x="72" y="43" class="head">Follow up</text>
+    <text x="24" y="80" class="body">Target key timestamps</text>
+    <text x="24" y="105" class="body">Extract supplemental frames</text>
+    <text x="24" y="130" class="body">Recheck conflicts</text>
+  </g>
+  <path class="arrow" d="M950 121 H1010"/>
+  <g transform="translate(1025 46)">
+    <rect class="box" width="140" height="150" rx="18"/>
+    <circle cx="34" cy="38" r="20" fill="#dcfce7"/><text x="29" y="44" class="num" fill="#15803d">04</text>
+    <text x="68" y="43" class="head">Report</text>
+    <text x="20" y="82" class="body">Conclusions</text>
+    <text x="20" y="108" class="body">Evidence</text>
+    <text x="20" y="134" class="body">Limits</text>
+  </g>
+</svg>

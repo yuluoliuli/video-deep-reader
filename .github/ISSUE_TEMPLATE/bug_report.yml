@@ -1,0 +1,52 @@
+name: Bug report
+description: Report a reproducible acquisition or analysis-workflow problem.
+title: "[Bug] "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Remove cookies, private links, usernames, local paths, and media before posting.
+        Security issues should follow SECURITY.md instead.
+  - type: textarea
+    id: goal
+    attributes:
+      label: What were you trying to do?
+    validations:
+      required: true
+  - type: textarea
+    id: command
+    attributes:
+      label: Sanitized command or Agent prompt
+      render: shell
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual result
+      description: Include the status and warnings from manifest.json when possible.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected result
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Environment
+      placeholder: "OS, Python, FFmpeg, Agent and skill version"
+    validations:
+      required: true
+  - type: checkboxes
+    id: safety
+    attributes:
+      label: Safety check
+      options:
+        - label: I removed credentials, private media, signed URLs, and personal paths.
+          required: true
+        - label: This is not a confidential security report.
+          required: true

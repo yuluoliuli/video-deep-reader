@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="320" viewBox="0 0 1280 320" role="img" aria-labelledby="title desc">
+  <title id="title">Video Deep Reader</title>
+  <desc id="desc">Captions and actual frames become timestamped, reviewable video evidence.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#111827"/>
+      <stop offset="0.58" stop-color="#172554"/>
+      <stop offset="1" stop-color="#083344"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#fbbf24"/>
+      <stop offset="1" stop-color="#fb7185"/>
+    </linearGradient>
+    <filter id="glow" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="12"/>
+    </filter>
+    <style>
+      .title { font: 800 68px Arial, Helvetica, sans-serif; letter-spacing: -2px; }
+      .sub { font: 500 24px Arial, Helvetica, sans-serif; }
+      .mono { font: 600 16px Consolas, monospace; letter-spacing: 1px; }
+      .label { font: 700 15px Arial, Helvetica, sans-serif; letter-spacing: 1.2px; }
+    </style>
+  </defs>
+  <rect width="1280" height="320" rx="24" fill="url(#bg)"/>
+  <circle cx="1180" cy="30" r="180" fill="#22d3ee" opacity=".12" filter="url(#glow)"/>
+  <circle cx="1020" cy="310" r="170" fill="#fb7185" opacity=".12" filter="url(#glow)"/>
+  <path d="M0 255 C150 210 220 300 370 245 S590 205 735 248 S980 310 1280 225 V320 H0Z" fill="#0f172a" opacity=".74"/>
+  <rect x="56" y="44" width="220" height="32" rx="16" fill="#0f172a" stroke="#38bdf8" stroke-opacity=".5"/>
+  <circle cx="76" cy="60" r="5" fill="#22c55e"/>
+  <text x="91" y="65" class="mono" fill="#bae6fd">EXPERIMENTAL v0.1.1</text>
+  <text x="56" y="146" class="title" fill="#f8fafc">VIDEO DEEP READER</text>
+  <text x="60" y="188" class="sub" fill="#cbd5e1">Captions × actual frames × traceable evidence</text>
+  <rect x="56" y="226" width="470" height="48" rx="12" fill="#0f172a" stroke="#334155"/>
+  <text x="76" y="256" class="mono" fill="#fbbf24">[04:12] result → [04:18] verification</text>
+  <g transform="translate(660 52)">
+    <rect x="0" y="25" width="544" height="190" rx="20" fill="#020617" fill-opacity=".7" stroke="#475569"/>
+    <rect x="28" y="58" width="164" height="126" rx="12" fill="#0f172a" stroke="#38bdf8"/>
+    <path d="M49 137 q10-62 20 0 t20 0 t20-34 t20 34 t20 0" fill="none" stroke="#22d3ee" stroke-width="4" stroke-linecap="round"/>
+    <text x="47" y="82" class="label" fill="#bae6fd">CAPTIONS</text>
+    <rect x="214" y="58" width="146" height="83" rx="12" fill="#111827" stroke="#fbbf24"/>
+    <rect x="228" y="73" width="118" height="53" rx="7" fill="#334155"/>
+    <path d="M262 105 l12-12 12 12 12-18 14 18" fill="none" stroke="#fbbf24" stroke-width="4"/>
+    <text x="226" y="161" class="label" fill="#fde68a">FRAME</text>
+    <rect x="382" y="58" width="132" height="126" rx="12" fill="#111827" stroke="#fb7185"/>
+    <path d="M401 87 h95 M401 110 h78 M401 133 h88" stroke="#94a3b8" stroke-width="5" stroke-linecap="round"/>
+    <path d="M400 157 l12 10 20-25" fill="none" stroke="#4ade80" stroke-width="5"/>
+    <text x="400" y="177" class="label" fill="#fecdd3">EVIDENCE</text>
+    <path d="M192 121 h20 M360 99 l20 22 M360 121 h20" stroke="#64748b" stroke-width="3"/>
+  </g>
+</svg>

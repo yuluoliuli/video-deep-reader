@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Read the usage guide
+    url: https://github.com/yuluoliuli/video-deep-reader#readme
+    about: Installation, output contract, security boundaries, and known limitations.
+  - name: Check a release
+    url: https://github.com/yuluoliuli/video-deep-reader/releases
+    about: Review version notes before reporting an issue.

@@ -1,0 +1,33 @@
+name: Feature request
+description: Propose a focused improvement to video evidence acquisition or analysis.
+title: "[Feature] "
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What user problem does this solve?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed behavior
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+  - type: textarea
+    id: cost
+    attributes:
+      label: New dependencies or maintenance cost
+      description: Note any API, model, background service, credential, or platform requirement.
+  - type: checkboxes
+    id: scope
+    attributes:
+      label: Scope check
+      options:
+        - label: This request is about evidence-grounded video reading rather than generic content tracking.
+          required: true
