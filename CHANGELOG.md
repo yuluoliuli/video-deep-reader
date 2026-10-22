@@ -3,6 +3,7 @@
 ## 0.1.1 — 2026-10-22
 
 - Expanded the repository landing page with a visual overview, workflow diagram, quick start, evidence model, output contract, compatibility matrix, and security boundaries.
+- Added a full English README alongside the Simplified Chinese landing page.
 - Added contribution and security policies, structured issue forms, CodeQL analysis, and Dependabot updates for GitHub Actions.
 - Added a 1280×640 social preview and repository artwork.
 

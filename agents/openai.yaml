@@ -1,4 +1,4 @@
 interface:
-  display_name: "视频深度解读"
-  short_description: "结合字幕与实际画面解读B站和本地视频，区分作者观点、证据及未核验部分"
-  default_prompt: "使用 $video-deep-reader 深度解读这个视频，结合字幕与画面提供带时间点的结论。"
+  display_name: "Video Deep Reader / 视频深度解读"
+  short_description: "Evidence-backed video analysis / 证据化视频解读"
+  default_prompt: "使用 $video-deep-reader / Use $video-deep-reader to provide timestamped, evidence-backed video analysis."
