@@ -139,16 +139,20 @@ Verified:
 
 - Local acceptance on Windows with Python 3.14 and FFmpeg.
 - One 7-minute 40-second Bilibili video: 225 timestamped segments, 99.88% time coverage, and 13 representative or follow-up frames actually inspected.
+- End-to-end `https://b23.tv/BV1toJR6HEVy` short-link resolution: the same video yielded 225 timestamped segments.
 - Local-video reuse and targeted frame extraction.
+- A subtitle-free local video returned `partial` / exit code 2, retained usable frames, and requested an explicit transcription path. It did not invoke ASR silently even though `faster-whisper` is installed.
 - Eight offline behavior tests and GitHub Actions on Ubuntu / Windows with Python 3.10 / 3.13.
 - Credentials are scoped to the HTTPS Bilibili API host; `Cookie` and `Authorization` headers are removed on redirects.
+- The DSH skill backend lists `video-deep-reader` with the expected current version and path.
 
 Not yet verified:
 
-- The complete download path for `b23.tv` short links.
 - Every Bilibili video, region, account permission, or anti-bot state.
-- Automatic activation and image inspection inside the DSH interface.
-- Automatic ASR when captions are absent. The current collector expects supplied captions or an explicitly authorized follow-up transcription.
+- Automatic activation and image inspection inside the DSH interface; the authenticated Web UI and full desktop-window interaction still need acceptance.
+- Automatic ASR is outside the current core implementation. The collector expects supplied captions or an explicitly authorized follow-up transcription.
+
+See [VERIFICATION.md](./VERIFICATION.md) for itemized evidence and dates.
 
 ## Security and privacy
 

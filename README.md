@@ -139,16 +139,20 @@ runs/example/
 
 - Windows / Python 3.14 / FFmpeg 的本机实测。
 - 一个 7 分 40 秒 B 站视频：225 段时间戳字幕、99.88% 时间覆盖、13 张实际查看的代表与补充帧。
+- `https://b23.tv/BV1toJR6HEVy` 短链端到端解析：成功取得同一视频的 225 段时间戳字幕。
 - 本地视频复用与定向补帧。
+- 无字幕本地视频返回 `partial`/退出码 2，保留可用画面并明确提示需要字幕或显式转写；不会因为安装了 `faster-whisper` 就静默调用 ASR。
 - 8 项离线行为测试，以及 GitHub Actions 的 Ubuntu / Windows、Python 3.10 / 3.13 矩阵。
 - 凭据仅发送到 HTTPS B站 API；重定向时剥离 `Cookie` 与 `Authorization` 头。
+- DSH 技能后端能列出 `video-deep-reader`，当前版本与路径正确。
 
 尚未验证：
 
-- b23.tv 短链的真实下载流程。
 - 所有 B站视频、地区、账号权限和风控状态。
-- DSH 界面中的自动触发与图片查看能力。
-- 无字幕时自动 ASR；当前实现要求外挂字幕或经授权的后续转写。
+- DSH 界面中的自动触发与图片查看能力；认证 Web UI 和桌面窗口的完整交互尚未完成验收。
+- 自动 ASR 不在当前核心实现中；当前实现要求外挂字幕或经授权的后续转写。
+
+逐项证据与日期见 [VERIFICATION.md](./VERIFICATION.md)。
 
 ## 安全与隐私
 

@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+- Verified `b23.tv` short-link resolution end to end.
+- Verified graceful subtitle-free behavior, explicit exit status, and no silent ASR invocation.
+- Verified DSH backend skill discovery; authenticated DSH UI and image inspection remain pending.
+
 ## 0.1.1 — 2026-10-22
 
 - Expanded the repository landing page with a visual overview, workflow diagram, quick start, evidence model, output contract, compatibility matrix, and security boundaries.
