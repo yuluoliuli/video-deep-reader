@@ -37,10 +37,10 @@ python "<SKILL_DIR>/scripts/read_video.py" "<video.mp4>" --subtitle "<captions.s
 1. 读取 `manifest.json`、`metadata.json`、完整 `transcript.txt`。长字幕按时间块阅读，记录每块范围，不静默截断。元信息、简介用于校正产品名，但不能覆盖原字幕：在报告单列疑似错词和校正依据。
 2. 用实际图片查看工具打开代表帧。`frames.json` 的相邻字幕仅作定位，不能代替看图。将实际看过的时间点、文件、画面观察保存到 `visual-evidence.md`；未打开的帧维持未核验。
 3. 围绕用户问题找关键证据。口播看观点与论据；教程看操作顺序和结果；评测看设置、对照、数字单位和结论；纯视觉内容以图片为主，不能捏造旁白。
-4. 对关键操作、图表、结论不清晰处补帧，优先复用已经下载的文件：
+4. 对关键操作、图表、结论不清晰处补帧，先读取之前 `manifest.json` 的 `video_path` 并确认文件存在，再用该路径作为源视频。本地视频不会复制到输出目录；远程视频下载成功后通常位于输出目录的 `video-only.mp4`，不要仅凭这个文件名拼接路径。
 
 ```powershell
-python "<SKILL_DIR>/scripts/read_video.py" "<之前输出/video-only.mp4>" --frames-only --frames 0 --times "02:42,03:11,04:12" --subtitle "<之前输出/segments.json>" --out "<新的补帧目录>"
+python "<SKILL_DIR>/scripts/read_video.py" "<manifest.json中video_path对应的现有文件>" --frames-only --frames 0 --times "02:42,03:11,04:12" --subtitle "<之前输出/segments.json>" --out "<新的补帧目录>"
 ```
 
 字幕与画面按同一 P 的秒数对齐，不拼接不同 P 的时间轴。需要看连续交互时通过 ego 播放相应片段；若没有连续观看，只声称“检查了采样帧”。默认最多两轮定向补帧，证据仍不足就标明限制，不无休止重试。

@@ -54,7 +54,7 @@ git clone https://github.com/yuluoliuli/video-deep-reader.git \
   ~/.agents/skills/video-deep-reader
 ```
 
-Codex can also use `~/.codex/skills/video-deep-reader`. Other hosts must be able to read `SKILL.md`, run Python, and inspect images. DSH integration has not passed an interface-level acceptance test yet.
+Codex can also use `~/.codex/skills/video-deep-reader`. Other hosts must be able to read `SKILL.md`, run Python, and inspect images. One explicitly invoked local-video workflow in a DSH desktop conversation passed on 2026-10-23; automatic skill selection and other models remain unverified.
 
 ### Ask for evidence-backed analysis
 
@@ -75,6 +75,8 @@ python -X utf8 scripts/read_video.py ./video.mp4 --subtitle ./captions.srt --out
 
 <details>
 <summary>Extract targeted follow-up frames from existing media</summary>
+
+Read `video_path` from the previous `manifest.json`, confirm that the file exists, and use that path as the source. The example below assumes a remote video was downloaded into the output directory. Local inputs are not copied there; use the original video path instead. Retain failed artifacts and use a new output directory when retrying.
 
 ```sh
 python -X utf8 scripts/read_video.py ./runs/example/video-only.mp4 \
@@ -110,7 +112,7 @@ runs/example/
 ├── transcript.txt      # readable timestamped transcript
 ├── frames.json         # timestamps, paths, nearby captions, review state
 ├── frames/*.jpg        # inspected and supplemental frames
-├── video-only.mp4      # video-only stream used for frames; no audio
+├── video-only.mp4      # retained remote download, no audio; local inputs are not copied
 └── manifest.json       # status, coverage, warnings, failures
 ```
 
@@ -142,14 +144,15 @@ Verified:
 - End-to-end `https://b23.tv/BV1toJR6HEVy` short-link resolution: the same video yielded 225 timestamped segments.
 - Local-video reuse and targeted frame extraction.
 - A subtitle-free local video returned `partial` / exit code 2, retained usable frames, and requested an explicit transcription path. It did not invoke ASR silently even though `faster-whisper` is installed.
-- Eight offline behavior tests and GitHub Actions on Ubuntu / Windows with Python 3.10 / 3.13.
+- Fifteen offline behavior tests pass locally in the current working copy. The published eight-test suite previously passed GitHub Actions on Ubuntu / Windows with Python 3.10 / 3.13; the additional fixes have not been pushed or verified by CI.
 - Credentials are scoped to the HTTPS Bilibili API host; `Cookie` and `Authorization` headers are removed on redirects.
 - The DSH skill backend lists `video-deep-reader` with the expected current version and path.
+- 2026-10-23: a user explicitly invoked the skill in a DSH desktop conversation, acquired a real local video with 225 caption segments, extracted frames, and produced a Chinese analysis. Sixteen `read_image` results contained image attachments with hashes matching the local files. The subtitle-free branch returned `partial` / exit 2 without ASR. Review corrected counting and evidence wording in the report; this does not establish error-free analysis.
 
 Not yet verified:
 
 - Every Bilibili video, region, account permission, or anti-bot state.
-- Automatic activation and image inspection inside the DSH interface; the authenticated Web UI and full desktop-window interaction still need acceptance.
+- Automatic skill selection in DSH, image support in other models, and the authenticated Web UI automation entry point. The accepted scope is the explicit desktop-conversation workflow above.
 - Automatic ASR is outside the current core implementation. The collector expects supplied captions or an explicitly authorized follow-up transcription.
 
 See [VERIFICATION.md](./VERIFICATION.md) for itemized evidence and dates.

@@ -54,7 +54,7 @@ git clone https://github.com/yuluoliuli/video-deep-reader.git \
   ~/.agents/skills/video-deep-reader
 ```
 
-Codex 也可使用 `~/.codex/skills/video-deep-reader`。其他宿主需要支持读取 `SKILL.md`、执行 Python 和查看图片；DSH 兼容性尚未完成界面验收。
+Codex 也可使用 `~/.codex/skills/video-deep-reader`。其他宿主需要支持读取 `SKILL.md`、执行 Python 和查看图片；2026-10-23 已通过一次 DSH 桌面对话显式调用的本地视频流程，自动选技能与其他模型兼容仍未验证。
 
 ### 2. 向 Agent 提出带证据的问题
 
@@ -75,6 +75,8 @@ python -X utf8 scripts/read_video.py ./video.mp4 --subtitle ./captions.srt --out
 
 <details>
 <summary>用现有视频和字幕定向补帧</summary>
+
+先查看之前 `manifest.json` 的 `video_path`，确认文件存在并用它作为源视频。以下示例适用于远程视频已下载到输出目录的情况；本地输入不会复制到该目录，应改用原视频路径。失败残片目录保留，重试使用新的输出目录。
 
 ```sh
 python -X utf8 scripts/read_video.py ./runs/example/video-only.mp4 \
@@ -110,7 +112,7 @@ runs/example/
 ├── transcript.txt      # 便于阅读的时间戳字幕
 ├── frames.json         # 帧时间、文件、附近字幕、核验状态
 ├── frames/*.jpg        # 实际代表帧与补充帧
-├── video-only.mp4      # 仅视频流，用于抽帧；不含音轨
+├── video-only.mp4      # 远程下载成功时保留的仅视频流，不含音轨；本地输入不复制
 └── manifest.json       # 状态、覆盖率、警告、失败信息
 ```
 
@@ -142,14 +144,15 @@ runs/example/
 - `https://b23.tv/BV1toJR6HEVy` 短链端到端解析：成功取得同一视频的 225 段时间戳字幕。
 - 本地视频复用与定向补帧。
 - 无字幕本地视频返回 `partial`/退出码 2，保留可用画面并明确提示需要字幕或显式转写；不会因为安装了 `faster-whisper` 就静默调用 ASR。
-- 8 项离线行为测试，以及 GitHub Actions 的 Ubuntu / Windows、Python 3.10 / 3.13 矩阵。
+- 当前工作副本的 15 项离线行为测试已在本地通过；已发布版本的 8 项检查曾通过 GitHub Actions 的 Ubuntu / Windows、Python 3.10 / 3.13 矩阵。新增修复尚未推送，不把本地结果算作 CI 通过。
 - 凭据仅发送到 HTTPS B站 API；重定向时剥离 `Cookie` 与 `Authorization` 头。
 - DSH 技能后端能列出 `video-deep-reader`，当前版本与路径正确。
+- 2026-10-23：用户在 DSH 桌面对话显式调用技能，读取真实本地视频与 225 段字幕、抽帧并输出中文分析；16 次 `read_image` 返回图片附件，其哈希与本地文件一致。无字幕分支返回 `partial`/退出码 2，未调用 ASR。报告经复核校正了计数与证据措辞，不代表分析零差错。
 
 尚未验证：
 
 - 所有 B站视频、地区、账号权限和风控状态。
-- DSH 界面中的自动触发与图片查看能力；认证 Web UI 和桌面窗口的完整交互尚未完成验收。
+- DSH 自然语言自动选技能、其他模型的图片能力与认证 Web UI 自动化入口；已通过的范围限上述桌面对话显式调用流程。
 - 自动 ASR 不在当前核心实现中；当前实现要求外挂字幕或经授权的后续转写。
 
 逐项证据与日期见 [VERIFICATION.md](./VERIFICATION.md)。

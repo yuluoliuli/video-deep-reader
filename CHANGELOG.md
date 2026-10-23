@@ -2,9 +2,15 @@
 
 ## Unreleased
 
+- Keep `--frames 0` subtitle-only even when a URL contains a focus timestamp.
+- Retain valid subtitle rows when others are malformed, report skipped evidence as partial, and reject nontext content instead of inventing words.
+- Preserve successful frame records when another frame times out or its decoder cannot start.
+- Reject malformed timestamps through the CLI parser and reject control characters in credential headers without echoing their values.
+- Expanded local regression coverage to 15 tests; new changes have not been pushed or validated by CI.
 - Verified `b23.tv` short-link resolution end to end.
 - Verified graceful subtitle-free behavior, explicit exit status, and no silent ASR invocation.
-- Verified DSH backend skill discovery; authenticated DSH UI and image inspection remain pending.
+- Verified an explicitly invoked local-video workflow in a DSH desktop conversation: skill loading, acquisition, image attachments, timestamped Chinese analysis, and missing-subtitle handling. Automatic selection, other models, and Web UI automation remain unverified; report review found and corrected counting and evidence wording.
+- Clarified that follow-up extraction uses `manifest.json`'s `video_path`; local videos are not copied into the output directory, and retries require a new output directory.
 
 ## 0.1.1 — 2026-10-22
 

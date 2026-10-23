@@ -34,6 +34,8 @@ def request(url, cookie='', binary=False):
     headers = {'User-Agent': 'Mozilla/5.0', 'Referer': 'https://www.bilibili.com/'}
     # Credentials stay on the Bilibili API host, never on CDN/media hosts.
     if cookie and urlparse(url).scheme == 'https' and urlparse(url).hostname == 'api.bilibili.com':
+        if any(ord(ch) < 32 or ord(ch) == 127 for ch in cookie):
+            raise ValueError('Credential header must be a single line without control characters')
         headers['Cookie'] = cookie
     r = open_request(Request(url, headers=headers), timeout=35)
     if binary:
@@ -49,13 +51,29 @@ def api(path, params, cookie):
     return r.get('data') or {}
 
 
-def normalize(rows):
+def normalize(rows, warnings=None):
     result = []
+    invalid = 0
     for s in rows:
-        start, end = float(s.get('start', s.get('from', 0))), float(s.get('end', s.get('to', 0)))
-        text = str(s.get('text', s.get('content', ''))).strip()
+        if not isinstance(s, dict):
+            invalid += 1
+            continue
+        try:
+            start, end = float(s.get('start', s.get('from', 0))), float(s.get('end', s.get('to', 0)))
+        except (TypeError, ValueError):
+            invalid += 1
+            continue
+        text = s.get('text', s.get('content', ''))
+        if not isinstance(text, str):
+            invalid += 1
+            continue
+        text = text.strip()
         if text and math.isfinite(start) and math.isfinite(end) and 0 <= start < end:
             result.append({'start': start, 'end': end, 'text': text})
+        elif text:
+            invalid += 1
+    if invalid and warnings is not None:
+        warnings.append(str(invalid) + ' malformed subtitle segments skipped; valid original text retained.')
     return sorted(result, key=lambda s: (s['start'], s['end']))
 
 
@@ -68,16 +86,16 @@ def seconds(value):
     return total
 
 
-def load_subtitle(path):
+def load_subtitle(path, warnings=None):
     text = Path(path).read_text(encoding='utf-8-sig')
     if Path(path).suffix.lower() == '.json':
         data = json.loads(text)
-        return normalize(data if isinstance(data, list) else data.get('body', data.get('segments', [])))
+        return normalize(data if isinstance(data, list) else data.get('body', data.get('segments', [])), warnings)
     rows = []
     pattern = r'(?m)^([\d:.,]+)\s+-->\s+([\d:.,]+)[^\n]*\n(.*?)(?=\n\s*\n|\Z)'
     for m in re.finditer(pattern, text, re.S):
         rows.append({'start': seconds(m[1]), 'end': seconds(m[2]), 'text': re.sub('<[^>]+>', '', m[3]).strip()})
-    return normalize(rows)
+    return normalize(rows, warnings)
 
 
 def coverage(rows, duration):
@@ -111,8 +129,14 @@ def frames(video, out, times, rows):
         dest = out / ('frame-%010.3f.jpg' % t)
         if dest.exists():
             raise RuntimeError('Frame already exists; use a new frame output directory')
-        r = subprocess.run(['ffmpeg', '-hide_banner', '-loglevel', 'error', '-n', '-ss', str(t), '-i', str(video), '-frames:v', '1', '-vf', 'scale=1280:-2', '-q:v', '3', str(dest)], capture_output=True, timeout=60)
-        results.append({'time': t, 'path': str(dest.resolve()), 'status': 'ok' if r.returncode == 0 and dest.is_file() and dest.stat().st_size else 'failed', 'nearby_subtitles': [s for s in rows if s['start'] <= t + 5 and s['end'] >= t - 5], 'visual_review': 'not_reviewed'})
+        item = {'time': t, 'path': str(dest.resolve()), 'status': 'failed', 'nearby_subtitles': [s for s in rows if s['start'] <= t + 5 and s['end'] >= t - 5], 'visual_review': 'not_reviewed'}
+        try:
+            r = subprocess.run(['ffmpeg', '-hide_banner', '-loglevel', 'error', '-n', '-ss', str(t), '-i', str(video), '-frames:v', '1', '-vf', 'scale=1280:-2', '-q:v', '3', str(dest)], capture_output=True, timeout=60)
+            if r.returncode == 0 and dest.is_file() and dest.stat().st_size:
+                item['status'] = 'ok'
+        except (subprocess.TimeoutExpired, OSError) as e:
+            item['error'] = type(e).__name__
+        results.append(item)
     return results
 
 
@@ -168,7 +192,10 @@ def main():
     args = p.parse_args()
     if not 0 <= args.frames <= 48 or args.max_mb < 1:
         p.error('frames must be 0..48 and max-mb positive')
-    extra = [seconds(t.strip()) for t in args.times.split(',') if t.strip()]
+    try:
+        extra = [seconds(t.strip()) for t in args.times.split(',') if t.strip()]
+    except ValueError:
+        p.error('times must contain non-negative finite seconds or HH:MM:SS timestamps')
     if len(extra) > 48:
         p.error('At most 48 supplemental timestamps per call')
     out = Path(args.out).resolve()
@@ -196,7 +223,7 @@ def main():
         save(out / 'metadata.json', meta)
         manifest['metadata'] = meta
         if args.subtitle:
-            rows = load_subtitle(args.subtitle)
+            rows = load_subtitle(args.subtitle, warnings)
             manifest['subtitle_source'] = 'user_supplied'
         elif not local:
             try:
@@ -207,7 +234,7 @@ def main():
                 if usable:
                     track = usable[0]
                     url = track['subtitle_url']
-                    rows = normalize(request('https:' + url if url.startswith('//') else url).get('body', []))
+                    rows = normalize(request('https:' + url if url.startswith('//') else url).get('body', []), warnings)
                     manifest['subtitle_source'] = 'platform:' + track.get('lan', 'unknown')
                 else:
                     warnings.append('No accessible subtitle URL: login may be required or subtitles unavailable.')
@@ -220,7 +247,7 @@ def main():
         manifest['subtitle_coverage'] = coverage(rows, float(meta['duration']))
         if rows and manifest['subtitle_coverage'] < .7:
             warnings.append('Subtitle time coverage below 70%; inspect gaps before drawing whole-video conclusions.')
-        if focus is not None:
+        if focus is not None and (args.frames or extra):
             extra += [focus - 3, focus, focus + 3]
         if args.frames or extra:
             try:
