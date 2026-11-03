@@ -19,7 +19,7 @@
 </p>
 
 > [!IMPORTANT]
-> **Experimental v0.1.1.** Successful acquisition does not mean the video's claims are verified. The report must state what captions and images were actually inspected and what remains unverified.
+> **Experimental v0.1.2.** Successful acquisition does not mean the video's claims are verified. The report must state what captions and images were actually inspected and what remains unverified.
 
 ## Why not another video summarizer
 
@@ -144,9 +144,9 @@ Verified:
 - End-to-end `https://b23.tv/BV1toJR6HEVy` short-link resolution: the same video yielded 225 timestamped segments.
 - Local-video reuse and targeted frame extraction.
 - A subtitle-free local video returned `partial` / exit code 2, retained usable frames, and requested an explicit transcription path. It did not invoke ASR silently even though `faster-whisper` is installed.
-- Fifteen offline behavior tests pass locally in the current working copy. The published eight-test suite previously passed GitHub Actions on Ubuntu / Windows with Python 3.10 / 3.13; the additional fixes have not been pushed or verified by CI.
+- The fifteen offline behavior tests and acquisition fixes have been pushed and passed GitHub Actions on Ubuntu / Windows with Python 3.10 / 3.13; CodeQL passed. See [VERIFICATION.md](./VERIFICATION.md) for commits, run links, and historical acceptance boundaries.
 - Credentials are scoped to the HTTPS Bilibili API host; `Cookie` and `Authorization` headers are removed on redirects.
-- The DSH skill backend lists `video-deep-reader` with the expected current version and path.
+- 2026-10-22: the DSH skill backend listed `video-deep-reader` at version `0.1.1` from the expected path. Host installation was not revalidated for this release.
 - 2026-10-23: a user explicitly invoked the skill in a DSH desktop conversation, acquired a real local video with 225 caption segments, extracted frames, and produced a Chinese analysis. Sixteen `read_image` results contained image attachments with hashes matching the local files. The subtitle-free branch returned `partial` / exit 2 without ASR. Review corrected counting and evidence wording in the report; this does not establish error-free analysis.
 
 Not yet verified:

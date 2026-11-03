@@ -1,16 +1,18 @@
 # Changelog
 
-## Unreleased
+## 0.1.2 — 2026-11-03
 
 - Keep `--frames 0` subtitle-only even when a URL contains a focus timestamp.
 - Retain valid subtitle rows when others are malformed, report skipped evidence as partial, and reject nontext content instead of inventing words.
 - Preserve successful frame records when another frame times out or its decoder cannot start.
 - Reject malformed timestamps through the CLI parser and reject control characters in credential headers without echoing their values.
-- Expanded local regression coverage to 15 tests; new changes have not been pushed or validated by CI.
+- Expanded regression coverage to 15 tests. The committed fixes passed GitHub Actions on Ubuntu / Windows with Python 3.10 / 3.13, plus CodeQL; see VERIFICATION.md for run links.
 - Verified `b23.tv` short-link resolution end to end.
 - Verified graceful subtitle-free behavior, explicit exit status, and no silent ASR invocation.
 - Verified an explicitly invoked local-video workflow in a DSH desktop conversation: skill loading, acquisition, image attachments, timestamped Chinese analysis, and missing-subtitle handling. Automatic selection, other models, and Web UI automation remain unverified; report review found and corrected counting and evidence wording.
 - Clarified that follow-up extraction uses `manifest.json`'s `video_path`; local videos are not copied into the output directory, and retries require a new output directory.
+- Updated `actions/setup-python` from v6 to v7 in PR #3; its four-platform/version test matrix and CodeQL passed before merge.
+- Updated bilingual README and skill metadata to 0.1.2; corrected obsolete unpublished/CI-pending wording while preserving dated media and DSH acceptance boundaries.
 
 ## 0.1.1 — 2026-10-22
 
